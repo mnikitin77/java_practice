@@ -7,41 +7,35 @@ import java.util.logging.Logger;
 
 public class LockBasedCounter {
 
-    final Lock lock = new ReentrantLock();
+    private final Lock lock = new ReentrantLock();
     private int counter;
     private int decrementsCount;
     private int incrementsCount;
 
     public int incrementAndGet() {
-        while(true) {
-            if (lock.tryLock()) {
-               try {
-                   System.out.println(Thread.currentThread().getName() + " increments the counter: value before = " + counter);
-                   counter++;
-                   incrementsCount++;
-               } finally {
-                   System.out.println(Thread.currentThread().getName() + " incremented the counter: value now = " + counter);
-                   lock.unlock();
-               }
-               return counter;
-            }
+        lock.lock();
+        try {
+           System.out.println(Thread.currentThread().getName() + " increments the counter: value before = " + counter);
+           counter++;
+           incrementsCount++;
+        } finally {
+            System.out.println(Thread.currentThread().getName() + " incremented the counter: value now = " + counter);
+            lock.unlock();
         }
+        return counter;
     }
 
     public int decrementAndGet() {
-        while(true) {
-            if (lock.tryLock()) {
-                try {
-                    System.out.println(Thread.currentThread().getName() + " dencrements the counter: value before = " + counter);
-                    counter--;
-                    decrementsCount++;
-                } finally {
-                    System.out.println(Thread.currentThread().getName() + " decremented the counter: value now = " + counter);
-                    lock.unlock();
-                }
-                return counter;
-            }
+        lock.lock();
+        try {
+            System.out.println(Thread.currentThread().getName() + " dencrements the counter: value before = " + counter);
+            counter--;
+            decrementsCount++;
+        } finally {
+            System.out.println(Thread.currentThread().getName() + " decremented the counter: value now = " + counter);
+            lock.unlock();
         }
+        return counter;
     }
 
     public void printStatistics() {
