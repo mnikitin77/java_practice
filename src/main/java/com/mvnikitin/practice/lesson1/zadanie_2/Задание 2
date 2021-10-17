@@ -1,0 +1,81 @@
+Описать ошибки в коде и предложить варианты оптимизации:
+
+interface Moveable {
+    void move();
+}
+
+// Вариант оптимизации: перенести метод в Movable, удалить Stopable
+interface Stopable {
+    void stop();
+}
+
+abstract class Car {
+// Ошибка проектирования - нарушение инкапсуляции, заменить на private
+    public Engine engine;
+    private String color;
+    private String name;
+
+
+// Вариант оптимизации: перенести метод в Movable
+// Не планируется вызывать метод из подклассов или классов из других пакетов?
+    protected void start() {
+        System.out.println("Car starting");
+    }
+
+// Не планируется вызывать метод из других пакетов?
+    abstract void open();
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+
+class LightWeightCar extends Car implements Moveable{
+
+    @Override
+    void open() {
+        System.out.println("Car is open");
+    }
+
+    @Override
+    public void move() {
+        System.out.println("Car is moving");
+    }
+
+}
+
+
+// Ошибка 1: класс (Lorry) не наследовать интерфейс (только интерфейс может наследовать интерфейс).
+// заменить на class Lorry extends Car implements Moveable, Stopable{
+// Ошибка 2: ошибка компиляции, класс Lorry не реализует абстрактный метод void open()
+class Lorry extends Car, Moveable, Stopable{
+
+    public void move(){
+        System.out.println("Car is moving");
+    }
+
+    public void stop(){
+        System.out.println("Car is stop");
+    }
+}
+
