@@ -16,7 +16,7 @@ public class MyArrayList<E> implements MyList<E>, Iterable<E> {
 
     private Object[] data = {};
 
-    void ensureCapacity(int minCapacity) {
+    public void ensureCapacity(int minCapacity) {
         if (data.length < minCapacity) {
             Object[] newArray = new Object[minCapacity];
             if(data.length > 0) {
@@ -26,7 +26,7 @@ public class MyArrayList<E> implements MyList<E>, Iterable<E> {
         }
     }
 
-    void trimToSize() {
+    public void trimToSize() {
         if (data.length > 0 ) {
             int newSize = getIndexOfLastNonNull() + 1;
             if(data.length > newSize) {
