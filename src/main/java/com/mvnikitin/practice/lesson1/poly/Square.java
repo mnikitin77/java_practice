@@ -2,7 +2,7 @@ package com.mvnikitin.practice.lesson1.poly;
 
 public class Square extends Shape {
 
-    double side;
+    private final double side;
 
     public Square(double side) {
         this.side = side;

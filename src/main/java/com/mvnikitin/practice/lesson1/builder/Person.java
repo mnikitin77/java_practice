@@ -8,7 +8,7 @@ public class Person {
     private String address;
     private String phone;
     private int age;
-    String gender;
+    private String gender;
 
     public String getFirstName() {
         return firstName;

@@ -2,9 +2,9 @@ package com.mvnikitin.practice.lesson1.poly;
 
 public class Triangle extends Shape {
 
-    private double sideA;
-    private double sideB;
-    private double sideC;
+    private final double sideA;
+    private final double sideB;
+    private final double sideC;
 
     public Triangle(double sideA, double sideB, double sideC)  {
         this.sideA = sideA;
@@ -24,7 +24,7 @@ public class Triangle extends Shape {
     }
 
     @Override
-    String getType() {
+    public String getType() {
         return "Это " + super.getType();
     }
 }
