@@ -12,7 +12,7 @@ WHERE t1.showtime < t2.showtime AND
 	t1.showtime + t1.duration_value * interval '1 minute' > t2.showtime
 ORDER BY t1.showtime, t2.showtime
 	
---перерывы 30 минут и более между фильмами — выводить по уменьшению длительности перерыва. Колонки «фильм 1», «время начала», «длительность», «время начала второго фильма», «длительность перерыва»;
+-- перерывы 30 минут и более между фильмами — выводить по уменьшению длительности перерыва. Колонки «фильм 1», «время начала», «длительность», «время начала второго фильма», «длительность перерыва»;
 SELECT 	t1.title AS "Movie 1", 
 		t1.showtime AS "Starts at", 
 		t1.duration_value AS "Duration", 
@@ -30,3 +30,24 @@ ON t1.id <> t2.id
 WHERE t1.showtime < t2.showtime AND
 	(t1.showtime + (t1.duration_value + 30) * interval '1 minute') <= t2.showtime
 ORDER BY Break DESC
+
+-- список фильмов, для каждого — с указанием общего числа посетителей за все время, среднего числа зрителей за сеанс и общей суммы сборов по каждому фильму (отсортировать по убыванию прибыли). Внизу таблицы должна быть строчка «итого», содержащая данные по всем фильмам сразу;
+SELECT	m.title, 
+		COALESCE(SUM(show_stat.show_count), 0) AS "total visits",
+		COALESCE(ROUND(AVG(show_stat.show_count),2), 0) AS "average visits per show",
+		COALESCE(SUM(show_stat.show_sales), money(0)) AS "total sales"
+FROM movie m
+LEFT JOIN
+	(SELECT ms.id, ms.movie_id, COUNT(st.id) as show_count, SUM(ms.price) as show_sales FROM movie_show ms
+		INNER JOIN sold_ticket st
+	ON st.movie_show_id = ms.id
+	GROUP BY ms.id) AS show_stat
+ON m.id = show_stat.id
+GROUP BY m.title
+ORDER BY sales DESC
+	
+	
+	
+	
+	
+	
