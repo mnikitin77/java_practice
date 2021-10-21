@@ -32,21 +32,27 @@ WHERE t1.showtime < t2.showtime AND
 ORDER BY Break DESC
 
 -- список фильмов, для каждого — с указанием общего числа посетителей за все время, среднего числа зрителей за сеанс и общей суммы сборов по каждому фильму (отсортировать по убыванию прибыли). Внизу таблицы должна быть строчка «итого», содержащая данные по всем фильмам сразу;
-SELECT	m.title, 
-		COALESCE(SUM(show_stat.show_count), 0) AS "total visits",
-		COALESCE(ROUND(AVG(show_stat.show_count),2), 0) AS "average visits per show",
-		COALESCE(SUM(show_stat.show_sales), money(0)) AS "total sales"
-FROM movie m
-LEFT JOIN
-	(SELECT ms.id, ms.movie_id, COUNT(st.id) as show_count, SUM(ms.price) as show_sales FROM movie_show ms
-		INNER JOIN sold_ticket st
-	ON st.movie_show_id = ms.id
-	GROUP BY ms.id) AS show_stat
-ON m.id = show_stat.id
-GROUP BY m.title
-ORDER BY sales DESC
-	
-	
+WITH stats AS (
+	SELECT	m.title, 
+			COALESCE(SUM(show_stat.show_count), 0) AS "total visits",
+			COALESCE(ROUND(AVG(show_stat.show_count),2), 0) AS "average visits per show",
+			COALESCE(SUM(show_stat.show_sales), money(0)) AS "total sales"
+	FROM movie m
+	LEFT JOIN
+		(SELECT ms.id, ms.movie_id, COUNT(st.id) as show_count, SUM(ms.price) as show_sales FROM movie_show ms
+			INNER JOIN sold_ticket st
+		ON st.movie_show_id = ms.id
+		GROUP BY ms.id) AS show_stat
+	ON m.id = show_stat.id
+	GROUP BY m.title
+)
+(SELECT * FROM stats ORDER BY "total sales" DESC)
+UNION
+(SELECT	'итого', 
+		COALESCE(SUM(stats."total visits"), 0), 
+		COALESCE(ROUND(AVG(stats."average visits per show"), 2), 0), 
+		COALESCE(SUM(stats."total sales"), money(0))
+FROM stats)
 	
 	
 	
