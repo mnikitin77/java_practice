@@ -1,4 +1,4 @@
-import com.mvnikitin.practice.lesson4.Lesson4factory;
+import com.mvnikitin.practice.lesson4.Lesson4Factory;
 import com.mvnikitin.practice.lesson4.dao.GenericRepository;
 import com.mvnikitin.practice.lesson4.dao.impl.GenericRepositoryImpl;
 import com.mvnikitin.practice.lesson4.entity.Student;
@@ -13,7 +13,7 @@ public class HomeworkHibernateGenericDaoTest {
 
     @AfterAll
     public static void tearDown() {
-        Lesson4factory.closeFactory();
+        Lesson4Factory.closeFactory();
     }
 
     @BeforeEach()

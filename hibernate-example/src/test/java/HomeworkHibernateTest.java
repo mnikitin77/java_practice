@@ -1,11 +1,10 @@
-import com.mvnikitin.practice.lesson4.Lesson4factory;
+import com.mvnikitin.practice.lesson4.Lesson4Factory;
 import com.mvnikitin.practice.lesson4.dao.StudentRepository;
 import com.mvnikitin.practice.lesson4.dao.impl.StudentRepositoryImpl;
 import com.mvnikitin.practice.lesson4.entity.Student;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 
-import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +13,7 @@ public class HomeworkHibernateTest {
 
     @AfterAll
     public static void tearDown() {
-        Lesson4factory.closeFactory();
+        Lesson4Factory.closeFactory();
     }
 
     @BeforeEach()

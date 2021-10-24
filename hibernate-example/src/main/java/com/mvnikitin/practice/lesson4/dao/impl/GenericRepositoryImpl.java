@@ -1,10 +1,9 @@
 package com.mvnikitin.practice.lesson4.dao.impl;
 
-import com.mvnikitin.practice.lesson4.Lesson4factory;
+import com.mvnikitin.practice.lesson4.Lesson4Factory;
 import com.mvnikitin.practice.lesson4.dao.GenericRepository;
 
 import javax.persistence.EntityManager;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -22,7 +21,7 @@ public class GenericRepositoryImpl<T, E> implements GenericRepository<T, E> {
     public E save(E entity) {
         Objects.requireNonNull(entity);
 
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         try {
             saveOrUpdate(entity, em);
@@ -38,7 +37,7 @@ public class GenericRepositoryImpl<T, E> implements GenericRepository<T, E> {
     public List<E> saveAll(List<E> entities) {
         Objects.requireNonNull(entities);
 
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         for(E entity: entities) {
             em.persist(entity);
@@ -53,7 +52,7 @@ public class GenericRepositoryImpl<T, E> implements GenericRepository<T, E> {
     public void deleteById(T id) {
         Objects.requireNonNull(id);
 
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         E entity = em.find(clazz, id);
         em.remove(entity);
@@ -63,7 +62,7 @@ public class GenericRepositoryImpl<T, E> implements GenericRepository<T, E> {
 
     @Override
     public void deleteAll() {
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         em.createQuery("DELETE FROM " + clazz.getSimpleName()).executeUpdate();
         em.getTransaction().commit();
@@ -74,7 +73,7 @@ public class GenericRepositoryImpl<T, E> implements GenericRepository<T, E> {
     public E findById(T id) {
         Objects.requireNonNull(id);
 
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         E entity = em.find(clazz, id);
         em.getTransaction().commit();
@@ -85,7 +84,7 @@ public class GenericRepositoryImpl<T, E> implements GenericRepository<T, E> {
 
     @Override
     public List<E> findAll() {
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         List<E> entities = em.createQuery("SELECT a FROM " + clazz.getSimpleName() + " a", clazz).getResultList();
         em.getTransaction().commit();

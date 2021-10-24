@@ -1,6 +1,6 @@
 package com.mvnikitin.practice.lesson4.dao.impl;
 
-import com.mvnikitin.practice.lesson4.Lesson4factory;
+import com.mvnikitin.practice.lesson4.Lesson4Factory;
 import com.mvnikitin.practice.lesson4.dao.StudentRepository;
 import com.mvnikitin.practice.lesson4.entity.Student;
 
@@ -14,7 +14,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     public Student save(Student entity) {
         Objects.requireNonNull(entity);
 
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         if(entity.getId() == null) {
             em.persist(entity);
@@ -30,7 +30,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     public List<Student> saveAll(List<Student> entities) {
         Objects.requireNonNull(entities);
 
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         for(Student entity: entities) {
             em.persist(entity);
@@ -45,7 +45,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     public void deleteById(Long id) {
         Objects.requireNonNull(id);
 
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         Student entity = em.find(Student.class, id);
         em.remove(entity);
@@ -56,7 +56,7 @@ public class StudentRepositoryImpl implements StudentRepository {
 
     @Override
     public void deleteAll() {
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         em.createNativeQuery("TRUNCATE TABLE student").executeUpdate();
         em.getTransaction().commit();
@@ -67,7 +67,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     public Student findById(Long id) {
         Objects.requireNonNull(id);
 
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         Student entity = em.find(Student.class, id);
         em.getTransaction().commit();
@@ -79,7 +79,7 @@ public class StudentRepositoryImpl implements StudentRepository {
     @Override
     public List<Student> findAll() {
 
-        EntityManager em = Lesson4factory.getFactory().createEntityManager();
+        EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         List<Student> entities = em.createQuery("SELECT a FROM Student a", Student.class).getResultList();
         em.getTransaction().commit();
