@@ -1,5 +1,5 @@
 import com.mvnikitin.practice.lesson4.Lesson4Factory;
-import com.mvnikitin.practice.lesson4.dao.StudentRepository;
+import com.mvnikitin.practice.lesson4.dao.GenericRepository;
 import com.mvnikitin.practice.lesson4.dao.impl.StudentRepositoryImpl;
 import com.mvnikitin.practice.lesson4.entity.Student;
 import org.assertj.core.api.Assertions;
@@ -18,7 +18,7 @@ public class HomeworkHibernateTest {
 
     @BeforeEach()
     public void fillData() {
-        StudentRepository repo = new StudentRepositoryImpl();
+        GenericRepository<Long, Student> repo = new StudentRepositoryImpl();
         List<Student> students = new ArrayList<>(TEST_DATA_AMOUNT);
         for (int i = 0; i < TEST_DATA_AMOUNT; i++) {
             students.add(new Student("Ivan " + i, "mark_" + i));
@@ -28,14 +28,14 @@ public class HomeworkHibernateTest {
 
     @AfterEach
     public void clear() {
-        StudentRepository repo = new StudentRepositoryImpl();
+        GenericRepository<Long, Student> repo = new StudentRepositoryImpl();
         repo.deleteAll();
     }
 
     @Test
     @DisplayName("A new entity creation test")
     public void createTest() {
-        StudentRepository repo = new StudentRepositoryImpl();
+        GenericRepository<Long, Student> repo = new StudentRepositoryImpl();
 
         Student saved = repo.save(new Student("Гайкин Пётр", "5"));
         Assertions.assertThat(saved.getId()).isNotNull();
@@ -44,7 +44,7 @@ public class HomeworkHibernateTest {
     @Test
     @DisplayName("Test of reading an entity")
     public void readTest() {
-        StudentRepository repo = new StudentRepositoryImpl();
+        GenericRepository<Long, Student> repo = new StudentRepositoryImpl();
 
         Student expected = repo.save(new Student("Гайкин Пётр", "5"));
         Long id = expected.getId();
@@ -59,7 +59,7 @@ public class HomeworkHibernateTest {
     @Test
     @DisplayName("Test of updating an entity")
     public void updateTest() {
-        StudentRepository repo = new StudentRepositoryImpl();
+        GenericRepository<Long, Student> repo = new StudentRepositoryImpl();
 
         Student newOne = repo.save(new Student("Гайкин Пётр", "5"));
         Long id = newOne.getId();
@@ -78,7 +78,7 @@ public class HomeworkHibernateTest {
     @Test
     @DisplayName("Entity delition test")
     public void deleteTest() {
-        StudentRepository repo = new StudentRepositoryImpl();
+        GenericRepository<Long, Student> repo = new StudentRepositoryImpl();
 
         Student newOne = repo.save(new Student("Гайкин Пётр", "5"));
         Long id = newOne.getId();

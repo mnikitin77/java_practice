@@ -1,14 +1,14 @@
 package com.mvnikitin.practice.lesson4.dao.impl;
 
 import com.mvnikitin.practice.lesson4.Lesson4Factory;
-import com.mvnikitin.practice.lesson4.dao.StudentRepository;
+import com.mvnikitin.practice.lesson4.dao.GenericRepository;
 import com.mvnikitin.practice.lesson4.entity.Student;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Objects;
 
-public class StudentRepositoryImpl implements StudentRepository {
+public class StudentRepositoryImpl implements GenericRepository<Long, Student> {
 
     @Override
     public Student save(Student entity) {
@@ -16,11 +16,7 @@ public class StudentRepositoryImpl implements StudentRepository {
 
         EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
-        if(entity.getId() == null) {
-            em.persist(entity);
-        } else {
-            em.merge(entity);
-        }
+        saveOrUpdate(em, entity);
         em.getTransaction().commit();
         em.close();
         return entity;
@@ -33,7 +29,7 @@ public class StudentRepositoryImpl implements StudentRepository {
         EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
         for(Student entity: entities) {
-            em.persist(entity);
+            saveOrUpdate(em, entity);
         }
         em.getTransaction().commit();
         em.close();
@@ -86,5 +82,13 @@ public class StudentRepositoryImpl implements StudentRepository {
         em.close();
 
         return entities;
+    }
+
+    private void saveOrUpdate(EntityManager em, Student entity) {
+        if (entity.getId() == null) {
+            em.persist(entity);
+        } else {
+            em.merge(entity);
+        }
     }
 }

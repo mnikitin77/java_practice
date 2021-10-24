@@ -23,8 +23,9 @@ public class GenericRepositoryImpl<T, E> implements GenericRepository<T, E> {
 
         EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
+        Method getIdMethod = getGetIdMethod(entity);
         try {
-            saveOrUpdate(entity, em);
+            saveOrUpdate(entity, em, getIdMethod);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,8 +40,13 @@ public class GenericRepositoryImpl<T, E> implements GenericRepository<T, E> {
 
         EntityManager em = Lesson4Factory.getFactory().createEntityManager();
         em.getTransaction().begin();
+        Method getIdMethod = getGetIdMethod(entities.get(0));
         for(E entity: entities) {
-            em.persist(entity);
+            try {
+                saveOrUpdate(entity, em, getIdMethod);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         em.getTransaction().commit();
         em.close();
@@ -93,16 +99,21 @@ public class GenericRepositoryImpl<T, E> implements GenericRepository<T, E> {
         return entities;
     }
 
-    private void saveOrUpdate(E entity, EntityManager em) throws InvocationTargetException, IllegalAccessException {
+    private void saveOrUpdate(E entity, EntityManager em, Method getIdMethod) throws InvocationTargetException, IllegalAccessException {
+        Objects.requireNonNull(getIdMethod);
+        if(getIdMethod.invoke(entity) == null) {
+            em.persist(entity);
+        } else {
+            em.merge(entity);
+        }
+    }
+
+    private Method getGetIdMethod(E entity) {
         for(Method m: entity.getClass().getMethods()) {
             if (m.getName().equalsIgnoreCase("getid")) {
-                if(m.invoke(entity) == null) {
-                    em.persist(entity);
-                } else {
-                    em.merge(entity);
-                }
-                break;
+                return m;
             }
         }
+        return null;
     }
 }
