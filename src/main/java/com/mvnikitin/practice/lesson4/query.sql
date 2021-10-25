@@ -54,6 +54,32 @@ UNION
 		COALESCE(SUM(stats."total sales"), money(0))
 FROM stats)
 	
-	
+-- число посетителей и кассовые сборы, сгруппированные по времени начала фильма: с 9 до 15, с 15 до 18, с 18 до 21, с 21 до 00:00 (сколько посетителей пришло с 9 до 15 часов и т.д.).	
+SELECT t."interval", t.visits, t.sales FROM 
+	((SELECT 1 AS idx, '9 - 15' AS "interval", COUNT(st.id) AS visits, COALESCE(SUM(price), money(0)) AS sales
+	FROM movie_show ms INNER JOIN sold_ticket st
+	ON ms.id = st.movie_show_id
+	WHERE CAST(showtime AS time) BETWEEN '09:00:00' AND '14:59:59')
+	UNION
+	(SELECT 2, '15 - 18', COUNT(st.id), COALESCE(SUM(price), money(0))
+	FROM movie_show ms INNER JOIN sold_ticket st
+	ON ms.id = st.movie_show_id
+	WHERE CAST(showtime AS time) BETWEEN '15:00:00' AND '17:59:59')
+	UNION
+	(SELECT 3, '18 - 21', COUNT(st.id), COALESCE(SUM(price), money(0))
+	FROM movie_show ms INNER JOIN sold_ticket st
+	ON ms.id = st.movie_show_id
+	WHERE CAST(showtime AS time) BETWEEN '18:00:00' AND '20:59:59')
+	UNION
+	(SELECT 4, '21 - 00:00', COUNT(st.id), COALESCE(SUM(price), money(0))
+	FROM movie_show ms INNER JOIN sold_ticket st
+	ON ms.id = st.movie_show_id
+	WHERE CAST(showtime AS time) BETWEEN '21:00:00' AND '23:59:59')) AS t
+ORDER BY idx
+
+
+
+
+
 	
 	
