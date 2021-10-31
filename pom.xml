@@ -5,6 +5,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>HelloWorldServlet</module>
+    <module>hibernate-example</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
