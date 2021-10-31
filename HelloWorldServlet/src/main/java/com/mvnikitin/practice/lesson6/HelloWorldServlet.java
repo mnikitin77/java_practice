@@ -12,6 +12,6 @@ public class HelloWorldServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter pw = resp.getWriter();
-        pw.println("<html><body><h1>Session not present</h1></body></html>");
+        pw.println("<html><body><h2>Hello world!</h2></body></html>");
     }
 }
