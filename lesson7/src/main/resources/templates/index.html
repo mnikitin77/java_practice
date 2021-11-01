@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Students</title>
+</head>
+
+
+<!-- Begin page content -->
+<main role="main">
+    <div>
+        <h3>Students</h3>
+    </div>
+    <form id="addStudentForm" th:action="@{/student}" th:object="${student}" method="POST">
+        <div style="display: flex; flex-direction: row; justify-content: between">
+            <div style="display: flex; justify-content: start; align-items: center;width: 300px; margin: 20px 30px 20px 30px;">
+                <label for="student_name" style="margin-right: 10px;">Name: </label>
+                <input id="student_name" th:field="*{name}" type="text" style="width: 200px;">
+            </div>
+            <div style="display: flex; justify-content: start; align-items: center;width: 150px; margin: 20px 30px 20px 0px;">
+                <label for="student_age" style="margin-right: 10px;">Age: </label>
+                <input id="student_age" th:field="*{age}" type="number" style="width: 50px;">
+            </div>
+            <div style="display: flex; justify-content: start; align-items: center; width: 80px; margin-left: 20px;">
+                <button type="submit" form="addStudentForm" style="width: 80px;">add</button>
+            </div>
+            <div style="display: flex; justify-content: start; align-items: center; width: 80px; margin-left: 5px;">
+                <button type="reset" form="addStudentForm" style="width: 80px;">clear</button>
+            </div>
+        </div>
+    </form>
+    <div style="display: flex; flex-direction: column; justify-content: center">
+        <div style="display: flex; flex-direction: row; justify-content: left; padding: 25px 0px 5px 0px">
+            <h3>List of Students</h3>
+        </div>
+
+        <div th:if="${students.empty}" style="display: flex; flex-direction: row; justify-content: left; padding: 25px 0px 5px 0px">
+            <h4>Sorry, no sudents available...</h4>
+        </div>
+        <div>
+            <div style="display: flex; flex-direction: row; justify-content: between">
+                <div style="display: flex; justify-content: start; align-items: center;width: 350px;">
+                    <b>Name</b>
+                </div>
+                <div style="display: flex; justify-content: start; align-items: center;width: 50px; margin: 5px 30px 20px 10px;">
+                    <b>Age</b>
+                </div>
+            </div>
+            <div th:each="student, iterStat : ${students}">
+                <div th:id="${'view_mode_panel_' + (iterStat.index + 1)}" style="display: flex; flex-direction: row; justify-content: between">
+                    <div style="display: flex; justify-self: center; align-self: center; width: 350px;">
+                        [[${iterStat.index + 1}]].&nbsp;&nbsp;[[${student.name}]]
+                    </div>
+                    <div style="display: flex; justify-content: center; align-content: center; width: 50px; margin: 5px 0px 5px 0px;">
+                        [[${student.age}]]
+                    </div>
+                    <div style="display: flex; justify-self: center; align-self: center; width: 80px; margin-left: 5px;">
+                        <input type="button" value="edit" style="width: 80px;" th:onclick="showOneHideOther(&quot;edit_mode_panel_[[${iterStat.index + 1}]]&quot;, &quot;view_mode_panel_[[${iterStat.index + 1}]]&quot;)">
+                    </div>
+                    <div style="display: flex; justify-self: center; align-self: center; width: 80px; margin-left: 20px;">
+                        <form th:action="@{/student/{id}(id = ${student.id})}" th:method="DELETE">
+                            <button type="submit" style="width: 80px;">delete</button>
+                        </form>
+                    </div>
+                </div>
+                <form th:action="@{/student}" th:object="${student}" method="POST">
+                    <div th:id="${'edit_mode_panel_' + (iterStat.index + 1)}" style="display: none;">
+                        <div style="display: flex; justify-self: center; align-self: center; width: 350px;">
+                            [[${iterStat.index + 1}]].&nbsp;&nbsp;
+                            <input type="text" id="name" name="name" th:value="*{name}" style="width: 300px;">
+                        </div>
+                        <div style="display: flex; justify-content: center; align-content: center; width: 50px; margin: 5px 0px 5px 0px;">
+                            <input type="number" id="age" name="age" th:value="*{age}" style="width: 50px;">
+                        </div>
+                        <input type="hidden" id="id" name="id" th:value="*{id}">
+                        <div style="display: flex; justify-self: center; align-self: center; width: 80px; margin-left: 5px;">
+                            <button type="submit" style="width: 80px;">save</button>
+                        </div>
+                        <div style="display: flex; justify-self: center; align-self: center; width: 80px; margin-left: 20px;">
+                            <input type="button" value="cancel" style="width: 80px;" th:onclick="showOneHideOther(&quot;view_mode_panel_[[${iterStat.index + 1}]]&quot;, &quot;edit_mode_panel_[[${iterStat.index + 1}]]&quot;)">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+function showOneHideOther(showId, hideId) {
+    var xShow = document.getElementById(showId);
+    xShow.style = "display: flex; flex-direction: row; justify-content: between";
+    var xHide = document.getElementById(hideId);
+    xHide.style = "display: none;";
+}
+</script>
+
+</body>
+</html>
