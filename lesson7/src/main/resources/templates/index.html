@@ -51,23 +51,54 @@
                     <b>Age</b>
                 </div>
             </div>
-            <div th:each="student, iterStat : ${students}" style="display: flex; flex-direction: row; justify-content: between">
-                <div style="display: flex; justify-self: center; align-self: center; width: 350px;">
-                    [[${iterStat.index + 1}]].&nbsp;&nbsp;[[${student.name}]]
+            <div th:each="student, iterStat : ${students}">
+                <div th:id="${'view_mode_panel_' + (iterStat.index + 1)}" style="display: flex; flex-direction: row; justify-content: between">
+                    <div style="display: flex; justify-self: center; align-self: center; width: 350px;">
+                        [[${iterStat.index + 1}]].&nbsp;&nbsp;[[${student.name}]]
+                    </div>
+                    <div style="display: flex; justify-content: center; align-content: center; width: 50px; margin: 5px 0px 5px 0px;">
+                        [[${student.age}]]
+                    </div>
+                    <div style="display: flex; justify-self: center; align-self: center; width: 80px; margin-left: 5px;">
+                        <input type="button" value="edit" style="width: 80px;" th:onclick="showOneHideOther(&quot;edit_mode_panel_[[${iterStat.index + 1}]]&quot;, &quot;view_mode_panel_[[${iterStat.index + 1}]]&quot;)">
+                    </div>
+                    <div style="display: flex; justify-self: center; align-self: center; width: 80px; margin-left: 20px;">
+                        <form th:action="@{/student/{id}(id = ${student.id})}" th:method="DELETE">
+                            <button type="submit" style="width: 80px;">delete</button>
+                        </form>
+                    </div>
                 </div>
-                <div style="display: flex; justify-content: center; align-content: center; width: 50px; margin: 5px 0px 5px 0px;">
-                    [[${student.age}]]
-                </div>
-                <div style="display: flex; justify-self: center; align-self: center; width: 80px; margin-left: 5px;">
-                    <button type="reset" style="width: 80px;">edit</button>
-                </div>
-                <div style="display: flex; justify-self: center; align-self: center; width: 80px; margin-left: 20px;">
-                    <button type="submit" style="width: 80px;">delete</button>
-                </div>
+                <form th:action="@{/student}" th:object="${student}" method="POST">
+                    <div th:id="${'edit_mode_panel_' + (iterStat.index + 1)}" style="display: none;">
+                        <div style="display: flex; justify-self: center; align-self: center; width: 350px;">
+                            [[${iterStat.index + 1}]].&nbsp;&nbsp;
+                            <input type="text" id="name" name="name" th:value="*{name}" style="width: 300px;">
+                        </div>
+                        <div style="display: flex; justify-content: center; align-content: center; width: 50px; margin: 5px 0px 5px 0px;">
+                            <input type="number" id="age" name="age" th:value="*{age}" style="width: 50px;">
+                        </div>
+                        <input type="hidden" id="id" name="id" th:value="*{id}">
+                        <div style="display: flex; justify-self: center; align-self: center; width: 80px; margin-left: 5px;">
+                            <button type="submit" style="width: 80px;">save</button>
+                        </div>
+                        <div style="display: flex; justify-self: center; align-self: center; width: 80px; margin-left: 20px;">
+                            <input type="button" value="cancel" style="width: 80px;" th:onclick="showOneHideOther(&quot;view_mode_panel_[[${iterStat.index + 1}]]&quot;, &quot;edit_mode_panel_[[${iterStat.index + 1}]]&quot;)">
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </main>
+
+<script>
+function showOneHideOther(showId, hideId) {
+    var xShow = document.getElementById(showId);
+    xShow.style = "display: flex; flex-direction: row; justify-content: between";
+    var xHide = document.getElementById(hideId);
+    xHide.style = "display: none;";
+}
+</script>
 
 </body>
 </html>

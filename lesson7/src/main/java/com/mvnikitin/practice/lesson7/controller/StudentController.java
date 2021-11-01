@@ -25,8 +25,14 @@ public class StudentController {
     }
 
     @PostMapping("/student")
-    public String add(Student student) {
+    public String saveOrAdd(Student student) {
         studentReposity.save(student);
+        return "redirect:/";
+    }
+
+    @DeleteMapping("/student/{id}")
+    public String remove(@PathVariable(value = "id") Long id) {
+        studentReposity.deleteById(id);
         return "redirect:/";
     }
 }

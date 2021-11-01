@@ -20,7 +20,7 @@ public class DBInitializedCheckTest {
     @Test
     @DisplayName("Когда приложение стартовало, все студенты из ликвибейз-ченджлога на месте")
     public void when_ApplicationStarted_ThereAreAllInsertedItemsInStudentTable() {
-        int initialStudentsCount = 4;
+        int initialStudentsCount = 6;
         Assertions.assertThat(studentReposity.count()).isEqualTo(initialStudentsCount);
         studentReposity.findAll().forEach(it -> log.info("stident: " + it.toString()));
     }
